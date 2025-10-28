@@ -15,8 +15,10 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import * as Haptics from 'expo-haptics';
-import { Add, ArchiveBox, InfoCircle } from 'iconsax-react-native';
+import { AddCircle, ArchiveBox, InfoCircle } from 'iconsax-react-native';
 import { 
   ListingActionsModal, 
   MarkAsSoldModal, 
@@ -29,7 +31,10 @@ import {
   ListingsToolbar,
 } from '../../components/listings';
 import { Listing } from '../../services';
+import { MainTabParamList } from '../../types';
 import { theme } from '../../theme';
+
+type NavigationProp = NativeStackNavigationProp<MainTabParamList>;
 
 // Mock data for user's listings
 const MOCK_LISTINGS: Listing[] = [
@@ -114,6 +119,7 @@ const MOCK_LISTINGS: Listing[] = [
 type ListingStatus = 'all' | 'active' | 'sold' | 'archived';
 
 export const ListingsScreen: React.FC = () => {
+  const navigation = useNavigation<NavigationProp>();
   const [selectedTab, setSelectedTab] = useState<ListingStatus>('all');
   const [refreshing, setRefreshing] = useState(false);
   const [selectedListing, setSelectedListing] = useState<typeof MOCK_LISTINGS[0] | null>(null);
@@ -365,6 +371,11 @@ export const ListingsScreen: React.FC = () => {
     setSelectedIds([]);
   };
 
+  const handleCreateListing = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    navigation.navigate('Post');
+  };
+
   const renderEmptyState = () => {
     const emptyStates = {
       all: {
@@ -392,8 +403,12 @@ export const ListingsScreen: React.FC = () => {
         <Text style={styles.emptyTitle}>{state.title}</Text>
         <Text style={styles.emptyMessage}>{state.message}</Text>
         {selectedTab === 'all' && (
-          <TouchableOpacity style={styles.createButton}>
-            <Add size={20} color={theme.colors.text.white} />
+          <TouchableOpacity 
+            style={styles.createButton}
+            onPress={handleCreateListing}
+            activeOpacity={0.7}
+          >
+            <AddCircle size={20} color={theme.colors.text.white} variant="Bold" />
             <Text style={styles.createButtonText}>Create Listing</Text>
           </TouchableOpacity>
         )}
@@ -412,8 +427,12 @@ export const ListingsScreen: React.FC = () => {
         <SafeAreaView edges={['top']}>
           <View style={styles.header}>
             <Text style={styles.headerTitle}>My Listings</Text>
-            <TouchableOpacity style={styles.addButton}>
-              <Add size={24} color={theme.colors.text.white} />
+            <TouchableOpacity 
+              style={styles.addButton}
+              onPress={handleCreateListing}
+              activeOpacity={0.7}
+            >
+              <AddCircle size={32} color={theme.colors.text.white} variant="Bold" />
             </TouchableOpacity>
           </View>
 
@@ -621,12 +640,7 @@ const styles = StyleSheet.create({
     color: theme.colors.text.white,
   },
   addButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    padding: 4,
   },
   statsContainer: {
     flexDirection: 'row',
