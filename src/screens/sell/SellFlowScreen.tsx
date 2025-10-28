@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import { ArrowLeft2, CloseSquare } from 'iconsax-react-native';
+import { ArrowLeft, CloseSquare } from 'iconsax-react-native';
 import {
   ProgressBar,
   Step1Post,
@@ -217,13 +217,13 @@ export const SellFlowScreen: React.FC<SellFlowScreenProps> = ({ onClose, onPubli
           <View style={styles.header}>
             <TouchableOpacity onPress={handleBack} style={styles.iconButton} activeOpacity={0.7}>
               <View style={styles.iconContainer}>
-                <ArrowLeft2 size={20} color={theme.colors.text.primary} variant="Linear" />
+                <ArrowLeft size={22} color={theme.colors.text.primary} variant="Linear" />
               </View>
             </TouchableOpacity>
             <Text style={styles.headerTitle}>{getStepTitle()}</Text>
             <TouchableOpacity onPress={onClose} style={styles.iconButton} activeOpacity={0.7}>
               <View style={styles.iconContainer}>
-                <CloseSquare size={24} color={theme.colors.text.primary} variant="Bold" />
+                <CloseSquare size={22} color={theme.colors.text.primary} variant="Linear" />
               </View>
             </TouchableOpacity>
           </View>
