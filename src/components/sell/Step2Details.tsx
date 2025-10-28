@@ -1,5 +1,5 @@
 /**
- * NewStep2Details Component
+ * Step2Details Component
  * Category, Subcategory, Condition, Material, Features, Brand
  */
 
@@ -23,7 +23,7 @@ import {
   Subcategory,
 } from '../../constants/sellCategories';
 
-interface NewStep2DetailsProps {
+interface Step2DetailsProps {
   formData: ListingFormData;
   onUpdate: (data: Partial<ListingFormData>) => void;
   onOpenCategoryModal: () => void;
@@ -34,7 +34,7 @@ interface NewStep2DetailsProps {
   onOpenBrandModal: () => void;
 }
 
-export const NewStep2Details: React.FC<NewStep2DetailsProps> = ({ 
+export const Step2Details: React.FC<Step2DetailsProps> = ({ 
   formData, 
   onUpdate,
   onOpenCategoryModal,

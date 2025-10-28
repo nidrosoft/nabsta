@@ -1,5 +1,5 @@
 /**
- * NewStep3Price Component
+ * Step3Price Component
  * Simplified pricing screen with firm on price toggle
  */
 
@@ -9,12 +9,12 @@ import { DollarCircle } from 'iconsax-react-native';
 import { ListingFormData } from '../../types/listing';
 import { theme } from '../../theme';
 
-interface NewStep3PriceProps {
+interface Step3PriceProps {
   formData: ListingFormData;
   onUpdate: (data: Partial<ListingFormData>) => void;
 }
 
-export const NewStep3Price: React.FC<NewStep3PriceProps> = ({ formData, onUpdate }) => {
+export const Step3Price: React.FC<Step3PriceProps> = ({ formData, onUpdate }) => {
   const handlePriceChange = (text: string) => {
     const cleaned = text.replace(/[^0-9.]/g, '');
     onUpdate({ price: cleaned, isFree: false });

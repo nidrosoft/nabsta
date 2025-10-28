@@ -1,5 +1,5 @@
 /**
- * NewStep1Post Component
+ * Step1Post Component
  * Combined: Photos + Title + Description
  */
 
@@ -21,12 +21,12 @@ import { Camera, Gallery, CloseCircle } from 'iconsax-react-native';
 import { ListingFormData } from '../../types/listing';
 import { theme } from '../../theme';
 
-interface NewStep1PostProps {
+interface Step1PostProps {
   formData: ListingFormData;
   onUpdate: (data: Partial<ListingFormData>) => void;
 }
 
-export const NewStep1Post: React.FC<NewStep1PostProps> = ({ formData, onUpdate }) => {
+export const Step1Post: React.FC<Step1PostProps> = ({ formData, onUpdate }) => {
   const maxPhotos = 10;
   const canAddMore = formData.photos.length < maxPhotos;
 
