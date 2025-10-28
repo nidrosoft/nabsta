@@ -606,8 +606,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   header: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
     paddingHorizontal: theme.spacing.md,
     paddingTop: theme.spacing.sm,
     paddingBottom: theme.spacing.md,

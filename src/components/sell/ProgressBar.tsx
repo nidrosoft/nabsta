@@ -14,7 +14,7 @@ interface ProgressBarProps {
   onStepPress?: (step: number) => void;
 }
 
-const STEP_LABELS = ['Details', 'Photos', 'Price', 'Location', 'Review'];
+const STEP_LABELS = ['Post', 'Details', 'Price', 'Location', 'Review'];
 
 export const ProgressBar: React.FC<ProgressBarProps> = ({
   currentStep,

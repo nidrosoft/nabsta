@@ -8,10 +8,18 @@ export type ShippingOption = 'pickup' | 'meetup' | 'shipping';
 export type ContactMethod = 'app' | 'phone' | 'text';
 
 export interface ListingFormData {
-  // Step 1: Category & Title
-  category: string;
+  // Step 1: Post (Photos + Title + Description)
+  photos: string[];
   title: string;
-  condition: ListingCondition | null;
+  description: string;
+  
+  // Step 2: Details
+  category: string;
+  subcategory?: string;
+  condition: string;
+  materials?: string[];
+  features?: string[];
+  brand?: string;
   isBusiness: boolean;
   
   // Business Details (if isBusiness is true)
@@ -27,15 +35,11 @@ export interface ListingFormData {
     sunday?: string;
   };
   
-  // Step 2: Photos & Description
-  photos: string[];
-  description: string;
-  brand: string;
-  
   // Step 3: Pricing
   price: string;
   isFree: boolean;
   isNegotiable: boolean;
+  isFirmOnPrice: boolean;
   quantity: number;
   
   // Step 4: Location

@@ -7,15 +7,21 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import { ArrowLeft2 } from 'iconsax-react-native';
+import { ArrowLeft2, CloseSquare } from 'iconsax-react-native';
 import {
   ProgressBar,
-  Step1Category,
-  Step2Photos,
-  Step3Pricing,
+  Step1Post,
+  Step2Details,
+  Step3Price,
   Step4Location,
   Step5Review,
   SuccessModal,
+  CategoryModal,
+  SubcategoryModal,
+  ConditionModal,
+  MaterialModal,
+  FeaturesModal,
+  BrandModal,
 } from '../../components/sell';
 import { BackIcon } from '../../components/common';
 import { ListingFormData } from '../../types/listing';
@@ -27,16 +33,20 @@ interface SellFlowScreenProps {
 }
 
 const INITIAL_FORM_DATA: ListingFormData = {
-  category: '',
-  title: '',
-  condition: null,
-  isBusiness: false,
   photos: [],
+  title: '',
   description: '',
+  category: '',
+  subcategory: '',
+  condition: '',
+  materials: [],
+  features: [],
   brand: '',
+  isBusiness: false,
   price: '',
   isFree: false,
   isNegotiable: false,
+  isFirmOnPrice: false,
   quantity: 1,
   location: {
     city: '',
@@ -56,6 +66,14 @@ export const SellFlowScreen: React.FC<SellFlowScreenProps> = ({ onClose, onPubli
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<ListingFormData>(INITIAL_FORM_DATA);
   const [showSuccess, setShowSuccess] = useState(false);
+  
+  // Modal states
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
+  const [showSubcategoryModal, setShowSubcategoryModal] = useState(false);
+  const [showConditionModal, setShowConditionModal] = useState(false);
+  const [showMaterialModal, setShowMaterialModal] = useState(false);
+  const [showFeaturesModal, setShowFeaturesModal] = useState(false);
+  const [showBrandModal, setShowBrandModal] = useState(false);
 
   const totalSteps = 5;
 
@@ -66,9 +84,9 @@ export const SellFlowScreen: React.FC<SellFlowScreenProps> = ({ onClose, onPubli
   const validateStep = (step: number): boolean => {
     switch (step) {
       case 1:
-        return !!(formData.category && formData.title && formData.condition);
+        return formData.photos.length >= 1 && formData.title.length >= 3;
       case 2:
-        return formData.photos.length >= 1 && formData.description.length >= 10;
+        return !!(formData.category && formData.condition);
       case 3:
         return formData.isFree || (formData.price && parseFloat(formData.price) > 0);
       case 4:
@@ -142,11 +160,22 @@ export const SellFlowScreen: React.FC<SellFlowScreenProps> = ({ onClose, onPubli
   const renderStep = () => {
     switch (currentStep) {
       case 1:
-        return <Step1Category formData={formData} onUpdate={updateFormData} />;
+        return <Step1Post formData={formData} onUpdate={updateFormData} />;
       case 2:
-        return <Step2Photos formData={formData} onUpdate={updateFormData} />;
+        return (
+          <Step2Details
+            formData={formData}
+            onUpdate={updateFormData}
+            onOpenCategoryModal={() => setShowCategoryModal(true)}
+            onOpenSubcategoryModal={() => setShowSubcategoryModal(true)}
+            onOpenConditionModal={() => setShowConditionModal(true)}
+            onOpenMaterialModal={() => setShowMaterialModal(true)}
+            onOpenFeaturesModal={() => setShowFeaturesModal(true)}
+            onOpenBrandModal={() => setShowBrandModal(true)}
+          />
+        );
       case 3:
-        return <Step3Pricing formData={formData} onUpdate={updateFormData} />;
+        return <Step3Price formData={formData} onUpdate={updateFormData} />;
       case 4:
         return <Step4Location formData={formData} onUpdate={updateFormData} />;
       case 5:
@@ -164,9 +193,9 @@ export const SellFlowScreen: React.FC<SellFlowScreenProps> = ({ onClose, onPubli
 
   const getStepTitle = () => {
     switch (currentStep) {
-      case 1: return 'Category & Title';
-      case 2: return 'Photos & Description';
-      case 3: return 'Pricing';
+      case 1: return 'Post an Item';
+      case 2: return 'Details';
+      case 3: return 'Price';
       case 4: return 'Location';
       case 5: return 'Review & Publish';
       default: return '';
@@ -186,12 +215,16 @@ export const SellFlowScreen: React.FC<SellFlowScreenProps> = ({ onClose, onPubli
       >
         <SafeAreaView edges={['top']}>
           <View style={styles.header}>
-            <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-              <BackIcon size={32} color={theme.colors.text.white} />
+            <TouchableOpacity onPress={handleBack} style={styles.iconButton} activeOpacity={0.7}>
+              <View style={styles.iconContainer}>
+                <ArrowLeft2 size={20} color={theme.colors.text.primary} variant="Linear" />
+              </View>
             </TouchableOpacity>
             <Text style={styles.headerTitle}>{getStepTitle()}</Text>
-            <TouchableOpacity onPress={handleSaveDraft} style={styles.saveButton}>
-              <Text style={styles.saveButtonText}>Save</Text>
+            <TouchableOpacity onPress={onClose} style={styles.iconButton} activeOpacity={0.7}>
+              <View style={styles.iconContainer}>
+                <CloseSquare size={24} color={theme.colors.text.primary} variant="Bold" />
+              </View>
             </TouchableOpacity>
           </View>
           
@@ -228,6 +261,53 @@ export const SellFlowScreen: React.FC<SellFlowScreenProps> = ({ onClose, onPubli
       </SafeAreaView>
 
       <SuccessModal visible={showSuccess} onClose={handleSuccessClose} />
+      
+      {/* Modals */}
+      <CategoryModal
+        visible={showCategoryModal}
+        selectedCategory={formData.category}
+        onSelect={(categoryId) => {
+          updateFormData({ category: categoryId, subcategory: '' });
+        }}
+        onClose={() => setShowCategoryModal(false)}
+      />
+      
+      <SubcategoryModal
+        visible={showSubcategoryModal}
+        categoryId={formData.category}
+        selectedSubcategory={formData.subcategory}
+        onSelect={(subcategoryId) => updateFormData({ subcategory: subcategoryId })}
+        onClear={() => updateFormData({ subcategory: '' })}
+        onClose={() => setShowSubcategoryModal(false)}
+      />
+      
+      <ConditionModal
+        visible={showConditionModal}
+        selectedCondition={formData.condition}
+        onSelect={(conditionId) => updateFormData({ condition: conditionId })}
+        onClose={() => setShowConditionModal(false)}
+      />
+      
+      <MaterialModal
+        visible={showMaterialModal}
+        selectedMaterials={formData.materials || []}
+        onUpdate={(materials) => updateFormData({ materials })}
+        onClose={() => setShowMaterialModal(false)}
+      />
+      
+      <FeaturesModal
+        visible={showFeaturesModal}
+        selectedFeatures={formData.features || []}
+        onUpdate={(features) => updateFormData({ features })}
+        onClose={() => setShowFeaturesModal(false)}
+      />
+      
+      <BrandModal
+        visible={showBrandModal}
+        currentBrand={formData.brand}
+        onUpdate={(brand) => updateFormData({ brand })}
+        onClose={() => setShowBrandModal(false)}
+      />
     </View>
   );
 };
@@ -247,8 +327,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: theme.spacing.md,
     paddingVertical: theme.spacing.md,
   },
-  backButton: {
+  iconButton: {
     padding: theme.spacing.xs,
+  },
+  iconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: theme.colors.background.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   headerTitle: {
     fontSize: theme.typography.fontSize.lg,
@@ -256,14 +344,6 @@ const styles = StyleSheet.create({
     color: theme.colors.text.white,
     flex: 1,
     textAlign: 'center',
-  },
-  saveButton: {
-    padding: theme.spacing.xs,
-  },
-  saveButtonText: {
-    fontSize: theme.typography.fontSize.md,
-    fontWeight: theme.typography.fontWeight.semibold,
-    color: theme.colors.text.white,
   },
   content: {
     flex: 1,
