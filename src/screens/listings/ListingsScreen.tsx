@@ -18,7 +18,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import * as Haptics from 'expo-haptics';
-import { AddCircle, ArchiveBox, InfoCircle } from 'iconsax-react-native';
+import { ArchiveBox, InfoCircle } from 'iconsax-react-native';
 import { 
   ListingActionsModal, 
   MarkAsSoldModal, 
@@ -201,15 +201,12 @@ export const ListingsScreen: React.FC = () => {
   };
 
   const handleEdit = () => {
-    Alert.alert('Edit Listing', `Edit: ${selectedListing?.title}`);
-  };
-
-  const handleUpdatePhotos = () => {
-    Alert.alert('Update Photos', `Update photos for: ${selectedListing?.title}`);
-  };
-
-  const handleChangePrice = () => {
-    Alert.alert('Change Price', `Change price for: ${selectedListing?.title}`);
+    Alert.alert(
+      'Edit Listing',
+      `Edit "${selectedListing?.title}"\n\nThis will open the edit screen where you can update photos, price, description, and all other details.`,
+      [{ text: 'OK' }]
+    );
+    // TODO: Navigate to edit screen with listing data
   };
 
   const handleMarkSold = (listing?: typeof MOCK_LISTINGS[0]) => {
@@ -371,10 +368,6 @@ export const ListingsScreen: React.FC = () => {
     setSelectedIds([]);
   };
 
-  const handleCreateListing = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    navigation.navigate('Post');
-  };
 
   const renderEmptyState = () => {
     const emptyStates = {
@@ -403,14 +396,9 @@ export const ListingsScreen: React.FC = () => {
         <Text style={styles.emptyTitle}>{state.title}</Text>
         <Text style={styles.emptyMessage}>{state.message}</Text>
         {selectedTab === 'all' && (
-          <TouchableOpacity 
-            style={styles.createButton}
-            onPress={handleCreateListing}
-            activeOpacity={0.7}
-          >
-            <AddCircle size={20} color={theme.colors.text.white} variant="Bold" />
-            <Text style={styles.createButtonText}>Create Listing</Text>
-          </TouchableOpacity>
+          <Text style={styles.emptyHint}>
+            Tap the + button below to create your first listing
+          </Text>
         )}
       </View>
     );
@@ -427,13 +415,6 @@ export const ListingsScreen: React.FC = () => {
         <SafeAreaView edges={['top']}>
           <View style={styles.header}>
             <Text style={styles.headerTitle}>My Listings</Text>
-            <TouchableOpacity 
-              style={styles.addButton}
-              onPress={handleCreateListing}
-              activeOpacity={0.7}
-            >
-              <AddCircle size={32} color={theme.colors.text.white} variant="Bold" />
-            </TouchableOpacity>
           </View>
 
           {/* Stats Summary */}
@@ -519,8 +500,6 @@ export const ListingsScreen: React.FC = () => {
             visible={showActionsModal}
             onClose={() => setShowActionsModal(false)}
             onEdit={handleEdit}
-            onUpdatePhotos={handleUpdatePhotos}
-            onChangePrice={handleChangePrice}
             onMarkSold={() => handleMarkSold()}
             onArchive={() => handleArchive()}
             onDuplicate={handleDuplicate}
@@ -627,9 +606,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
+    justifyContent: 'center',
     paddingHorizontal: theme.spacing.md,
     paddingTop: theme.spacing.sm,
     paddingBottom: theme.spacing.md,
@@ -638,9 +616,6 @@ const styles = StyleSheet.create({
     fontSize: theme.typography.fontSize.xxl,
     fontWeight: theme.typography.fontWeight.bold,
     color: theme.colors.text.white,
-  },
-  addButton: {
-    padding: 4,
   },
   statsContainer: {
     flexDirection: 'row',
@@ -791,19 +766,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: theme.spacing.lg,
   },
-  createButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: theme.colors.primary.start,
-    paddingHorizontal: theme.spacing.lg,
-    paddingVertical: theme.spacing.md,
-    borderRadius: theme.borderRadius.lg,
-  },
-  createButtonText: {
-    fontSize: theme.typography.fontSize.md,
-    fontWeight: theme.typography.fontWeight.semibold,
-    color: theme.colors.text.white,
-    marginLeft: theme.spacing.xs,
+  emptyHint: {
+    fontSize: theme.typography.fontSize.sm,
+    color: theme.colors.text.tertiary,
+    marginTop: theme.spacing.md,
+    textAlign: 'center',
   },
   // Multi-select styles
   listingCardSelected: {

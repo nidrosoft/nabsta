@@ -15,8 +15,6 @@ import {
 import * as Haptics from 'expo-haptics';
 import {
   Edit2,
-  Camera,
-  DollarCircle,
   TickCircle,
   Archive,
   Copy,
@@ -30,8 +28,6 @@ interface ListingActionsModalProps {
   visible: boolean;
   onClose: () => void;
   onEdit: () => void;
-  onUpdatePhotos: () => void;
-  onChangePrice: () => void;
   onMarkSold: () => void;
   onArchive: () => void;
   onDuplicate: () => void;
@@ -45,8 +41,6 @@ export const ListingActionsModal: React.FC<ListingActionsModalProps> = ({
   visible,
   onClose,
   onEdit,
-  onUpdatePhotos,
-  onChangePrice,
   onMarkSold,
   onArchive,
   onDuplicate,
@@ -111,18 +105,6 @@ export const ListingActionsModal: React.FC<ListingActionsModalProps> = ({
               icon={Edit2}
               label="Edit listing"
               onPress={onEdit}
-              color={theme.colors.primary.start}
-            />
-            <ActionButton
-              icon={Camera}
-              label="Update photos"
-              onPress={onUpdatePhotos}
-              color={theme.colors.primary.start}
-            />
-            <ActionButton
-              icon={DollarCircle}
-              label="Change price"
-              onPress={onChangePrice}
               color={theme.colors.primary.start}
             />
             <ActionButton
