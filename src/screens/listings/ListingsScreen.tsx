@@ -10,76 +10,104 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Image,
   RefreshControl,
   Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import { SwipeListView } from 'react-native-swipe-list-view';
 import * as Haptics from 'expo-haptics';
-import { Add, Eye, Heart, MessageText1, More, Edit2, Trash, Archive, TickCircle, ArchiveBox, InfoCircle, SearchNormal1, Setting4 } from 'iconsax-react-native';
-import { ListingActionsModal, MarkAsSoldModal, ConfirmDialog, ListingInsightsModal, PromoteListingModal, FilterSortModal } from '../../components/listings';
-import { SearchBar } from '../../components/common';
+import { Add, ArchiveBox, InfoCircle } from 'iconsax-react-native';
+import { 
+  ListingActionsModal, 
+  MarkAsSoldModal, 
+  ConfirmDialog, 
+  ListingInsightsModal, 
+  PromoteListingModal, 
+  FilterSortModal,
+  ListingsList,
+  ListingsFilters,
+  ListingsToolbar,
+} from '../../components/listings';
+import { Listing } from '../../services';
 import { theme } from '../../theme';
 
 // Mock data for user's listings
-const MOCK_LISTINGS = [
+const MOCK_LISTINGS: Listing[] = [
   {
     id: '1',
     title: 'iPhone 13 Pro Max 256GB',
     price: 899,
     image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&q=80',
-    status: 'active' as const,
+    status: 'active',
     views: 124,
     saves: 8,
     messages: 3,
     postedDate: '2 days ago',
+    location: 'San Francisco, CA',
+    userId: 'user1',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   },
   {
     id: '2',
     title: 'Vintage Camera',
     price: 180,
     image: 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=400&q=80',
-    status: 'active' as const,
+    status: 'active',
     views: 89,
     saves: 5,
     messages: 2,
     postedDate: '5 days ago',
+    location: 'Los Angeles, CA',
+    userId: 'user1',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   },
   {
     id: '3',
     title: 'Mountain Bike',
     price: 450,
     image: 'https://images.unsplash.com/photo-1576435728678-68d0fbf94e91?w=400&q=80',
-    status: 'sold' as const,
+    status: 'sold',
     views: 156,
     saves: 12,
     messages: 8,
     postedDate: '1 week ago',
     soldPrice: 420,
+    location: 'San Diego, CA',
+    userId: 'user1',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   },
   {
     id: '4',
     title: 'Gaming Chair',
     price: 175,
     image: 'https://images.unsplash.com/photo-1598550476439-6847785fcea6?w=400&q=80',
-    status: 'active' as const,
+    status: 'active',
     views: 45,
     saves: 3,
     messages: 1,
     postedDate: '3 days ago',
+    location: 'San Jose, CA',
+    userId: 'user1',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   },
   {
     id: '5',
     title: 'Wooden Dresser',
     price: 150,
     image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&q=80',
-    status: 'archived' as const,
+    status: 'archived',
     views: 67,
     saves: 4,
     messages: 2,
     postedDate: '2 weeks ago',
+    location: 'Oakland, CA',
+    userId: 'user1',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   },
 ];
 
@@ -337,114 +365,6 @@ export const ListingsScreen: React.FC = () => {
     setSelectedIds([]);
   };
 
-  const getStatusBadge = (status: string) => {
-    const badges = {
-      active: { text: 'Active', color: '#10B981' }, // Green
-      sold: { text: 'Sold', color: '#3B82F6' }, // Blue
-      archived: { text: 'Archived', color: theme.colors.text.tertiary },
-    };
-    return badges[status as keyof typeof badges] || badges.active;
-  };
-
-  const renderListingCard = (listing: typeof MOCK_LISTINGS[0]) => {
-    const badge = getStatusBadge(listing.status);
-    const isSelected = selectedIds.includes(listing.id);
-    
-    return (
-      <TouchableOpacity
-        key={listing.id}
-        style={[
-          styles.listingCard,
-          isSelected && styles.listingCardSelected,
-        ]}
-        activeOpacity={0.7}
-        onPress={() => multiSelectMode ? toggleSelection(listing.id) : null}
-        onLongPress={() => handleLongPress(listing)}
-      >
-        {multiSelectMode && (
-          <View style={[styles.checkbox, isSelected && styles.checkboxSelected]}>
-            {isSelected && <TickCircle size={20} color="#FFFFFF" variant="Bold" />}
-          </View>
-        )}
-        
-        <Image source={{ uri: listing.image }} style={styles.listingImage} />
-        
-        <View style={styles.listingInfo}>
-          <View style={styles.listingHeader}>
-            <View style={styles.listingTitleRow}>
-              <Text style={styles.listingTitle} numberOfLines={1}>
-                {listing.title}
-              </Text>
-              {!multiSelectMode && (
-                <TouchableOpacity 
-                  style={styles.moreButton}
-                  onPress={() => handleOpenActions(listing)}
-                >
-                  <More size={20} color={theme.colors.text.secondary} />
-                </TouchableOpacity>
-              )}
-            </View>
-            
-            <View style={styles.priceStatusRow}>
-              <Text style={styles.listingPrice}>${listing.price.toLocaleString()}</Text>
-              <View style={[styles.statusBadge, { backgroundColor: badge.color + '20' }]}>
-                <Text style={[styles.statusText, { color: badge.color }]}>
-                  {badge.text}
-                </Text>
-              </View>
-            </View>
-          </View>
-
-          <View style={styles.metricsRow}>
-            <View style={styles.metric}>
-              <Eye size={16} color={theme.colors.text.tertiary} variant="Bold" />
-              <Text style={styles.metricText}>{listing.views}</Text>
-            </View>
-            <View style={styles.metric}>
-              <Heart size={16} color={theme.colors.text.tertiary} variant="Bold" />
-              <Text style={styles.metricText}>{listing.saves}</Text>
-            </View>
-            <View style={styles.metric}>
-              <MessageText1 size={16} color={theme.colors.text.tertiary} variant="Bold" />
-              <Text style={styles.metricText}>{listing.messages}</Text>
-            </View>
-          </View>
-
-          <Text style={styles.postedDate}>Posted {listing.postedDate}</Text>
-        </View>
-      </TouchableOpacity>
-    );
-  };
-
-  const renderHiddenItem = (listing: typeof MOCK_LISTINGS[0]) => (
-    <View style={styles.rowBack}>
-      <TouchableOpacity
-        style={[styles.backRightBtn, styles.backRightBtnLeft]}
-        onPress={() => {
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-          handleEdit();
-        }}
-      >
-        <Edit2 size={20} color="#FFFFFF" variant="Bold" />
-        <Text style={styles.backTextWhite}>Edit</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[styles.backRightBtn, styles.backRightBtnCenter]}
-        onPress={() => handleArchive(listing)}
-      >
-        <Archive size={20} color="#FFFFFF" variant="Bold" />
-        <Text style={styles.backTextWhite}>Archive</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[styles.backRightBtn, styles.backRightBtnRight]}
-        onPress={() => handleDelete(listing)}
-      >
-        <Trash size={20} color="#FFFFFF" variant="Bold" />
-        <Text style={styles.backTextWhite}>Delete</Text>
-      </TouchableOpacity>
-    </View>
-  );
-
   const renderEmptyState = () => {
     const emptyStates = {
       all: {
@@ -517,106 +437,45 @@ export const ListingsScreen: React.FC = () => {
         </SafeAreaView>
       </LinearGradient>
 
-      {/* Search and Filter */}
-      <View style={styles.searchContainer}>
-        <View style={styles.searchBarWrapper}>
-          <SearchBar
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-            placeholder="Search your listings..."
-          />
-        </View>
-        <TouchableOpacity
-          style={styles.filterButton}
-          onPress={() => setShowFilterModal(true)}
-          activeOpacity={0.7}
-        >
-          <Setting4 size={20} color={theme.colors.text.primary} variant="Bold" />
-        </TouchableOpacity>
-      </View>
+      {/* Filters Component */}
+      <ListingsFilters
+        searchQuery={searchQuery}
+        selectedTab={selectedTab}
+        stats={{
+          all: MOCK_LISTINGS.length,
+          active: stats.active,
+          sold: stats.sold,
+          archived: stats.archived,
+        }}
+        onSearchChange={setSearchQuery}
+        onTabChange={setSelectedTab}
+        onFilterPress={() => setShowFilterModal(true)}
+      />
 
-      {/* Filter Tabs */}
-      <View style={styles.tabsContainer}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <TouchableOpacity
-            style={[styles.tab, selectedTab === 'all' && styles.tabActive]}
-            onPress={() => setSelectedTab('all')}
-          >
-            <Text style={[styles.tabText, selectedTab === 'all' && styles.tabTextActive]}>
-              All ({MOCK_LISTINGS.length})
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.tab, selectedTab === 'active' && styles.tabActive]}
-            onPress={() => setSelectedTab('active')}
-          >
-            <Text style={[styles.tabText, selectedTab === 'active' && styles.tabTextActive]}>
-              Active ({stats.active})
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.tab, selectedTab === 'sold' && styles.tabActive]}
-            onPress={() => setSelectedTab('sold')}
-          >
-            <Text style={[styles.tabText, selectedTab === 'sold' && styles.tabTextActive]}>
-              Sold ({stats.sold})
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.tab, selectedTab === 'archived' && styles.tabActive]}
-            onPress={() => setSelectedTab('archived')}
-          >
-            <Text style={[styles.tabText, selectedTab === 'archived' && styles.tabTextActive]}>
-              Archived ({stats.archived})
-            </Text>
-          </TouchableOpacity>
-        </ScrollView>
-      </View>
-
-      {/* Multi-select toolbar */}
+      {/* Multi-select Toolbar Component */}
       {multiSelectMode && (
-        <View style={styles.multiSelectToolbar}>
-          <TouchableOpacity onPress={exitMultiSelect}>
-            <Text style={styles.toolbarCancel}>Cancel</Text>
-          </TouchableOpacity>
-          <Text style={styles.toolbarTitle}>{selectedIds.length} selected</Text>
-          <View style={styles.toolbarActions}>
-            <TouchableOpacity
-              style={styles.toolbarButton}
-              onPress={handleBulkArchive}
-            >
-              <Archive size={20} color={theme.colors.text.primary} variant="Bold" />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.toolbarButton}
-              onPress={handleBulkDelete}
-            >
-              <Trash size={20} color="#EF4444" variant="Bold" />
-            </TouchableOpacity>
-          </View>
-        </View>
+        <ListingsToolbar
+          selectedCount={selectedIds.length}
+          onCancel={exitMultiSelect}
+          onBulkArchive={handleBulkArchive}
+          onBulkDelete={handleBulkDelete}
+        />
       )}
 
-      {/* Listings List with Swipe */}
+      {/* Listings List Component */}
       {filteredListings.length > 0 ? (
-        <SwipeListView
-          data={filteredListings}
-          renderItem={({ item }) => renderListingCard(item)}
-          renderHiddenItem={({ item }) => renderHiddenItem(item)}
-          rightOpenValue={-225}
-          disableRightSwipe
-          closeOnRowPress
-          closeOnScroll
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-              tintColor={theme.colors.primary.start}
-              colors={[theme.colors.primary.start]}
-            />
-          }
-          style={styles.listingsContainer}
-          contentContainerStyle={styles.listingsContent}
+        <ListingsList
+          listings={filteredListings}
+          refreshing={refreshing}
+          multiSelectMode={multiSelectMode}
+          selectedIds={selectedIds}
+          onRefresh={onRefresh}
+          onListingPress={handleOpenActions}
+          onLongPress={handleLongPress}
+          onToggleSelection={toggleSelection}
+          onEdit={handleEdit}
+          onArchive={handleArchive}
+          onDelete={handleDelete}
         />
       ) : (
         <ScrollView
