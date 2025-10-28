@@ -1,0 +1,200 @@
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: theme.colors.background.primary,
+  },
+  gradientHeader: {
+    // Gradient stops at header bottom
+  },
+  header: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: theme.spacing.md,
+  },
+  headerTitle: {
+    fontSize: theme.typography.fontSize.xl,
+    fontWeight: theme.typography.fontWeight.bold,
+    color: theme.colors.text.white,
+  },
+  content: {
+    flex: 1,
+  },
+  // Profile Section
+  profileSection: {
+    flexDirection: 'row',
+    padding: theme.spacing.lg,
+    backgroundColor: theme.colors.background.primary,
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.ui.border,
+  },
+  profileImageContainer: {
+    position: 'relative',
+    marginRight: theme.spacing.md,
+  },
+  profileImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: '#60A5FA',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  cameraButton: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: '#9CA3AF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: theme.colors.background.primary,
+  },
+  profileInfo: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  profileName: {
+    fontSize: theme.typography.fontSize.lg,
+    fontWeight: theme.typography.fontWeight.bold,
+    color: theme.colors.text.primary,
+    marginBottom: theme.spacing.xs,
+  },
+  ratingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: theme.spacing.xs,
+  },
+  ratingText: {
+    fontSize: theme.typography.fontSize.sm,
+    color: theme.colors.text.secondary,
+    marginLeft: theme.spacing.xs,
+  },
+  followContainer: {
+    flexDirection: 'row',
+    gap: theme.spacing.md,
+  },
+  followText: {
+    fontSize: theme.typography.fontSize.sm,
+    color: theme.colors.text.secondary,
+    fontWeight: theme.typography.fontWeight.semibold,
+  },
+  // Premium Banner
+  premiumBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: theme.spacing.md,
+    backgroundColor: theme.colors.background.primary,
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.ui.border,
+  },
+  premiumLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.sm,
+  },
+  premiumIcon: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#EDE9FE',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  premiumText: {
+    fontSize: theme.typography.fontSize.md,
+    fontWeight: theme.typography.fontWeight.semibold,
+    color: theme.colors.text.primary,
+  },
+  // Verification Section
+  verificationSection: {
+    padding: theme.spacing.lg,
+    backgroundColor: theme.colors.background.primary,
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.ui.border,
+  },
+  verificationTitle: {
+    fontSize: theme.typography.fontSize.md,
+    fontWeight: theme.typography.fontWeight.semibold,
+    color: theme.colors.text.primary,
+    marginBottom: theme.spacing.md,
+  },
+  verificationButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: theme.spacing.md,
+  },
+  verificationButton: {
+    alignItems: 'center',
+    gap: theme.spacing.xs,
+  },
+  verificationButtonText: {
+    fontSize: theme.typography.fontSize.xs,
+    color: theme.colors.text.secondary,
+    textAlign: 'center',
+  },
+  learnMoreText: {
+    fontSize: theme.typography.fontSize.sm,
+    color: '#10B981',
+    fontWeight: theme.typography.fontWeight.semibold,
+    textAlign: 'center',
+  },
+  // Section Title
+  sectionTitle: {
+    fontSize: theme.typography.fontSize.lg,
+    fontWeight: theme.typography.fontWeight.bold,
+    color: theme.colors.text.primary,
+    paddingHorizontal: theme.spacing.lg,
+    paddingTop: theme.spacing.lg,
+    paddingBottom: theme.spacing.sm,
+  },
+  // Card
+  card: {
+    backgroundColor: theme.colors.background.primary,
+    marginHorizontal: theme.spacing.lg,
+    borderRadius: theme.borderRadius.lg,
+    overflow: 'hidden',
+    ...theme.shadows.sm,
+  },
+  // Menu Item
+  menuItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: theme.spacing.md,
+    backgroundColor: theme.colors.background.primary,
+  },
+  menuItemLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  iconContainer: {
+    marginRight: theme.spacing.md,
+  },
+  menuItemText: {
+    flex: 1,
+  },
+  menuItemTitle: {
+    fontSize: theme.typography.fontSize.md,
+    fontWeight: theme.typography.fontWeight.medium,
+    color: theme.colors.text.primary,
+  },
+  menuItemSubtitle: {
+    fontSize: theme.typography.fontSize.sm,
+    color: '#8B5CF6',
+    fontWeight: theme.typography.fontWeight.semibold,
+    marginTop: 2,
+  },
+  separator: {
+    height: 1,
+    backgroundColor: theme.colors.ui.border,
+    marginLeft: theme.spacing.md + 24 + theme.spacing.md, // Icon width + margins
+  },
+  bottomSpacing: {
+    height: 100,
+  },
+});

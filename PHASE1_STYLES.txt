@@ -1,0 +1,183 @@
+// Add these styles to the end of the StyleSheet.create in ChatScreen.tsx, before the closing });
+
+  // Offer Button (in input area)
+  offerButton: {
+    width: 44,
+    height: 44,
+  },
+  offerButtonGradient: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  offerButtonText: {
+    fontSize: 20,
+  },
+  // Offer Card (in messages)
+  offerCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: theme.borderRadius.lg,
+    padding: theme.spacing.lg,
+    borderWidth: 2,
+    borderColor: theme.colors.primary.start,
+    ...theme.shadows.md,
+  },
+  buyerOfferCard: {
+    alignSelf: 'flex-end',
+    maxWidth: '85%',
+  },
+  sellerOfferCard: {
+    alignSelf: 'flex-start',
+    maxWidth: '85%',
+    borderColor: '#F59E0B',
+  },
+  offerHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: theme.spacing.sm,
+  },
+  offerLabel: {
+    fontSize: theme.typography.fontSize.sm,
+    fontWeight: theme.typography.fontWeight.semibold,
+    color: theme.colors.text.secondary,
+    textTransform: 'uppercase',
+  },
+  offerStatusBadge: {
+    paddingHorizontal: theme.spacing.sm,
+    paddingVertical: 4,
+    borderRadius: theme.borderRadius.sm,
+  },
+  offerPending: {
+    backgroundColor: '#FEF3C7',
+  },
+  offerAccepted: {
+    backgroundColor: '#D1FAE5',
+  },
+  offerDeclined: {
+    backgroundColor: '#FEE2E2',
+  },
+  offerCountered: {
+    backgroundColor: '#DBEAFE',
+  },
+  offerStatusText: {
+    fontSize: theme.typography.fontSize.xs,
+    fontWeight: theme.typography.fontWeight.bold,
+  },
+  offerAmount: {
+    fontSize: 32,
+    fontWeight: theme.typography.fontWeight.bold,
+    color: theme.colors.primary.start,
+    marginVertical: theme.spacing.xs,
+  },
+  offerOriginalPrice: {
+    fontSize: theme.typography.fontSize.sm,
+    color: theme.colors.text.secondary,
+    textDecorationLine: 'line-through',
+    marginBottom: theme.spacing.md,
+  },
+  offerActions: {
+    flexDirection: 'row',
+    gap: theme.spacing.sm,
+    marginTop: theme.spacing.sm,
+  },
+  offerActionButton: {
+    flex: 1,
+    paddingVertical: theme.spacing.sm,
+    borderRadius: theme.borderRadius.md,
+    alignItems: 'center',
+  },
+  acceptButton: {
+    backgroundColor: '#10B981',
+  },
+  declineButton: {
+    backgroundColor: '#EF4444',
+  },
+  counterButton: {
+    backgroundColor: '#F59E0B',
+  },
+  offerActionText: {
+    color: '#FFFFFF',
+    fontSize: theme.typography.fontSize.sm,
+    fontWeight: theme.typography.fontWeight.semibold,
+  },
+  offerTimestamp: {
+    fontSize: theme.typography.fontSize.xs,
+    color: theme.colors.text.secondary,
+    marginTop: theme.spacing.sm,
+    textAlign: 'right',
+  },
+  // Offer Modal
+  offerModal: {
+    backgroundColor: theme.colors.background.primary,
+    borderTopLeftRadius: theme.borderRadius.xxl,
+    borderTopRightRadius: theme.borderRadius.xxl,
+    marginTop: 'auto',
+    maxHeight: '60%',
+  },
+  offerModalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: theme.spacing.xl,
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.ui.border,
+  },
+  offerModalTitle: {
+    fontSize: theme.typography.fontSize.xl,
+    fontWeight: theme.typography.fontWeight.bold,
+    color: theme.colors.text.primary,
+  },
+  offerModalContent: {
+    padding: theme.spacing.xl,
+  },
+  offerModalLabel: {
+    fontSize: theme.typography.fontSize.lg,
+    fontWeight: theme.typography.fontWeight.semibold,
+    color: theme.colors.text.primary,
+    marginBottom: theme.spacing.xs,
+  },
+  offerModalSubtext: {
+    fontSize: theme.typography.fontSize.sm,
+    color: theme.colors.text.secondary,
+    marginBottom: theme.spacing.lg,
+  },
+  offerInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F3F4F6',
+    borderRadius: theme.borderRadius.lg,
+    paddingHorizontal: theme.spacing.lg,
+    marginBottom: theme.spacing.xl,
+  },
+  offerCurrencySymbol: {
+    fontSize: 32,
+    fontWeight: theme.typography.fontWeight.bold,
+    color: theme.colors.text.primary,
+    marginRight: theme.spacing.sm,
+  },
+  offerInput: {
+    flex: 1,
+    fontSize: 32,
+    fontWeight: theme.typography.fontWeight.bold,
+    color: theme.colors.text.primary,
+    paddingVertical: theme.spacing.lg,
+  },
+  submitOfferButton: {
+    borderRadius: theme.borderRadius.lg,
+    overflow: 'hidden',
+  },
+  submitOfferGradient: {
+    paddingVertical: theme.spacing.lg,
+    alignItems: 'center',
+  },
+  submitOfferText: {
+    fontSize: theme.typography.fontSize.lg,
+    fontWeight: theme.typography.fontWeight.bold,
+    color: '#FFFFFF',
+  },
+  submitOfferTextDisabled: {
+    color: '#9CA3AF',
+  },
