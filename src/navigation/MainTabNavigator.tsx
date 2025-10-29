@@ -16,7 +16,6 @@ import { SellFlowScreen } from '../screens/sell';
 import { ListingDetailScreen } from '../screens/listing';
 import { InboxStackNavigator } from './InboxStackNavigator';
 import { ChatScreen } from '../screens/chat';
-import { ListingTypeBottomSheet } from '../components/common';
 import { MainTabParamList, CategoryType } from '../types';
 import { theme } from '../theme';
 
@@ -28,7 +27,6 @@ interface MainTabNavigatorProps {
 
 
 export const MainTabNavigator: React.FC<MainTabNavigatorProps> = ({ onNavigateToChat }) => {
-  const [showListingSheet, setShowListingSheet] = useState(false);
   const [showSellFlow, setShowSellFlow] = useState(false);
   const [showListingDetail, setShowListingDetail] = useState(false);
   const slideAnim = React.useRef(new Animated.Value(1000)).current; // Start off-screen
@@ -52,21 +50,11 @@ export const MainTabNavigator: React.FC<MainTabNavigatorProps> = ({ onNavigateTo
     }
   }, [showListingDetail]);
 
-  const handlePostPress = () => {
+  const handleFabPress = () => {
     if (Platform.OS === 'ios') {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     }
-    setShowListingSheet(true);
-  };
-
-  const handleSelectListingType = (type: string) => {
-    console.log('Selected listing type:', type);
-    if (type === 'sell') {
-      setShowSellFlow(true);
-    } else {
-      // TODO: Handle other listing types
-      console.log('Other listing types coming soon');
-    }
+    setShowSellFlow(true);
   };
 
   return (
@@ -148,7 +136,7 @@ export const MainTabNavigator: React.FC<MainTabNavigatorProps> = ({ onNavigateTo
         listeners={{
           tabPress: (e) => {
             e.preventDefault();
-            handlePostPress();
+            handleFabPress();
           },
         }}
         options={{
@@ -156,7 +144,7 @@ export const MainTabNavigator: React.FC<MainTabNavigatorProps> = ({ onNavigateTo
           tabBarIcon: () => (
             <TouchableOpacity
               style={styles.fabContainer}
-              onPress={handlePostPress}
+              onPress={handleFabPress}
               activeOpacity={0.8}
             >
               <LinearGradient
@@ -195,11 +183,6 @@ export const MainTabNavigator: React.FC<MainTabNavigatorProps> = ({ onNavigateTo
       />
     </Tab.Navigator>
 
-    <ListingTypeBottomSheet
-      visible={showListingSheet}
-      onClose={() => setShowListingSheet(false)}
-      onSelectType={handleSelectListingType}
-    />
 
     {showSellFlow && (
       <View style={styles.sellFlowOverlay}>

@@ -240,20 +240,23 @@ interface HomeScreenProps {
 
 const CATEGORIES = [
   { id: 'all', name: 'All', icon: 'category' },
-  { id: 'cars', name: 'Cars & Vehicles', icon: 'car' },
+  { id: 'vehicles', name: 'Vehicles', icon: 'car' },
+  { id: 'property', name: 'Property Rentals', icon: 'home3' },
+  { id: 'apparel', name: 'Apparel', icon: 'shoppingBag' },
+  { id: 'classifieds', name: 'Classifieds', icon: 'category' },
   { id: 'electronics', name: 'Electronics', icon: 'electricity' },
-  { id: 'furniture', name: 'Furniture', icon: 'home3' },
-  { id: 'clothing', name: 'Clothing & Shoes', icon: 'shoppingBag' },
-  { id: 'homeGarden', name: 'Home & Garden', icon: 'home2' },
-  { id: 'sports', name: 'Sports & Outdoors', icon: 'cup' },
-  { id: 'toys', name: 'Toys & Games', icon: 'game' },
-  { id: 'books', name: 'Books & Media', icon: 'book' },
+  { id: 'entertainment', name: 'Entertainment', icon: 'game' },
+  { id: 'family', name: 'Family', icon: 'heart' },
+  { id: 'free', name: 'Free Stuff', icon: 'category' },
+  { id: 'garden', name: 'Garden & Outdoor', icon: 'home2' },
+  { id: 'hobbies', name: 'Hobbies', icon: 'cup' },
+  { id: 'home', name: 'Home Goods', icon: 'home3' },
   { id: 'pets', name: 'Pet Supplies', icon: 'heart' },
-  { id: 'other', name: 'Other', icon: 'category' },
+  { id: 'sports', name: 'Sporting Goods', icon: 'cup' },
 ];
 
 const getCategoryIcon = (iconName: string, color: string) => {
-  const iconProps = { size: 16, color, variant: 'Bold' as const };
+  const iconProps = { size: 16, color, variant: 'Linear' as const };
   switch (iconName) {
     case 'car': return <Car {...iconProps} />;
     case 'electricity': return <Electricity {...iconProps} />;
@@ -335,16 +338,40 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onListingPress }) => {
       >
         {CATEGORIES.map((category) => {
           const isSelected = category.id === selectedCategory;
-          const iconColor = isSelected ? theme.colors.text.white : theme.colors.text.primary;
+          const textColor = isSelected ? theme.colors.text.white : theme.colors.text.primary;
+          
+          if (isSelected) {
+            return (
+              <LinearGradient
+                key={category.id}
+                colors={theme.colors.primary.gradient}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.categoryPill}
+              >
+                <TouchableOpacity
+                  onPress={() => setSelectedCategory(category.id)}
+                  activeOpacity={0.7}
+                  style={styles.categoryPillInner}
+                >
+                  {getCategoryIcon(category.icon, textColor)}
+                  <Text style={[styles.categoryPillText, styles.categoryPillTextSelected]}>
+                    {category.name}
+                  </Text>
+                </TouchableOpacity>
+              </LinearGradient>
+            );
+          }
+          
           return (
             <TouchableOpacity
               key={category.id}
-              style={[styles.categoryPill, isSelected && styles.categoryPillSelected]}
+              style={styles.categoryPill}
               onPress={() => setSelectedCategory(category.id)}
               activeOpacity={0.7}
             >
-              {getCategoryIcon(category.icon, iconColor)}
-              <Text style={[styles.categoryPillText, isSelected && styles.categoryPillTextSelected]}>
+              {getCategoryIcon(category.icon, textColor)}
+              <Text style={styles.categoryPillText}>
                 {category.name}
               </Text>
             </TouchableOpacity>
@@ -353,7 +380,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onListingPress }) => {
       </ScrollView>
 
       <ScrollView 
-        style={styles.scrollView} 
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
@@ -394,7 +420,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.background.primary,
   },
   gradientHeader: {
-    paddingBottom: 60, // Increased by 20% more (was 50, now 60)
+    paddingBottom: theme.spacing.sm,
   },
   searchContainer: {
     paddingHorizontal: theme.spacing.md,
@@ -410,41 +436,43 @@ const styles = StyleSheet.create({
     paddingHorizontal: theme.spacing.md,
   },
   categoriesContainer: {
-    maxHeight: 60,
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.ui.border,
     backgroundColor: theme.colors.background.primary,
+    paddingVertical: theme.spacing.md,
   },
   categoriesContent: {
     paddingHorizontal: theme.spacing.md,
-    paddingVertical: theme.spacing.sm,
+    paddingVertical: theme.spacing.md,
     gap: theme.spacing.sm,
+    alignItems: 'center',
   },
   categoryPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
     paddingHorizontal: theme.spacing.lg,
     paddingVertical: theme.spacing.sm,
     borderRadius: theme.borderRadius.full,
     backgroundColor: theme.colors.background.secondary,
     marginRight: theme.spacing.sm,
+    minHeight: 48,
   },
-  categoryPillSelected: {
-    backgroundColor: theme.colors.primary.start,
+  categoryPillInner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
   },
   categoryPillText: {
     fontSize: theme.typography.fontSize.sm,
     fontWeight: theme.typography.fontWeight.semibold,
-    color: theme.colors.text.secondary,
+    color: theme.colors.text.primary,
   },
   categoryPillTextSelected: {
     color: theme.colors.text.white,
   },
-  scrollView: {
-    flex: 1,
-    backgroundColor: theme.colors.background.primary,
-    marginTop: 160, // Add space for absolutely positioned categories
-  },
   section: {
-    marginTop: theme.spacing.sm,
+    marginTop: 0,
   },
   sectionHeader: {
     flexDirection: 'row',
