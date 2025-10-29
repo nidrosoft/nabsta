@@ -16,9 +16,8 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SearchNormal1, Location, Setting4 } from 'iconsax-react-native';
-import { SearchBar, ComingSoonBanner } from '../../components/common';
-import { CategoryGrid, DiscoverBanner, ListingCard } from '../../components/home';
-import { CategoryType } from '../../types';
+import { SearchBar } from '../../components/common';
+import { DiscoverBanner, ListingCard } from '../../components/home';
 import { theme } from '../../theme';
 
 // Mock data for listings - 20 items with various images
@@ -236,14 +235,27 @@ const MOCK_LISTINGS = [
 ];
 
 interface HomeScreenProps {
-  onCategoryPress: (category: CategoryType) => void;
   onListingPress?: () => void;
-  onForSalePress?: () => void;
 }
 
-export const HomeScreen: React.FC<HomeScreenProps> = ({ onCategoryPress, onListingPress, onForSalePress }) => {
+const CATEGORIES = [
+  'All',
+  'Cars & Vehicles',
+  'Electronics',
+  'Furniture',
+  'Clothing & Shoes',
+  'Home & Garden',
+  'Sports & Outdoors',
+  'Toys & Games',
+  'Books & Media',
+  'Pet Supplies',
+  'Other',
+];
+
+export const HomeScreen: React.FC<HomeScreenProps> = ({ onListingPress }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [refreshing, setRefreshing] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState('All');
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -251,20 +263,10 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onCategoryPress, onListi
     await new Promise(resolve => setTimeout(resolve, 1500));
     setRefreshing(false);
   };
-  const [selectedCategory, setSelectedCategory] = useState<CategoryType | null>(null);
-
-  const handleCategoryPress = (category: CategoryType) => {
-    setSelectedCategory(category);
-    onCategoryPress(category);
-  };
 
   const handleLocalEventsPress = () => {
     // TODO: Navigate to local events
     console.log('Navigate to local events');
-  };
-
-  const handleForSalePress = () => {
-    onForSalePress?.();
   };
 
   const handleListingPress = (listingId: string) => {
@@ -300,10 +302,29 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onCategoryPress, onListi
         </SafeAreaView>
       </LinearGradient>
 
-      {/* Category Grid - Positioned above gradient */}
-      <View style={styles.categorySection}>
-        <CategoryGrid onCategoryPress={handleCategoryPress} />
-      </View>
+      {/* Category Pills - Horizontal Scrollable */}
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={styles.categoriesContainer}
+        contentContainerStyle={styles.categoriesContent}
+      >
+        {CATEGORIES.map((category) => {
+          const isSelected = category === selectedCategory;
+          return (
+            <TouchableOpacity
+              key={category}
+              style={[styles.categoryPill, isSelected && styles.categoryPillSelected]}
+              onPress={() => setSelectedCategory(category)}
+              activeOpacity={0.7}
+            >
+              <Text style={[styles.categoryPillText, isSelected && styles.categoryPillTextSelected]}>
+                {category}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
+      </ScrollView>
 
       <ScrollView 
         style={styles.scrollView} 
@@ -320,14 +341,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onCategoryPress, onListi
         {/* Discover Banner */}
         <DiscoverBanner onPress={handleLocalEventsPress} />
 
-        {/* For Sale Section */}
+        {/* Listings Section */}
         <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>For sale</Text>
-            <TouchableOpacity onPress={handleForSalePress} activeOpacity={0.7}>
-              <Text style={styles.viewAllText}>View all</Text>
-            </TouchableOpacity>
-          </View>
 
           {/* Listings Grid - 2 column with minimal spacing */}
           <View style={styles.listingsGrid}>
@@ -368,13 +383,42 @@ const styles = StyleSheet.create({
     zIndex: 10, // Layer above gradient
     paddingHorizontal: theme.spacing.md,
   },
+  categoriesContainer: {
+    maxHeight: 60,
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.ui.border,
+    backgroundColor: theme.colors.background.primary,
+  },
+  categoriesContent: {
+    paddingHorizontal: theme.spacing.md,
+    paddingVertical: theme.spacing.sm,
+    gap: theme.spacing.sm,
+  },
+  categoryPill: {
+    paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.sm,
+    borderRadius: theme.borderRadius.full,
+    backgroundColor: theme.colors.background.secondary,
+    marginRight: theme.spacing.sm,
+  },
+  categoryPillSelected: {
+    backgroundColor: theme.colors.primary.start,
+  },
+  categoryPillText: {
+    fontSize: theme.typography.fontSize.sm,
+    fontWeight: theme.typography.fontWeight.semibold,
+    color: theme.colors.text.secondary,
+  },
+  categoryPillTextSelected: {
+    color: theme.colors.text.white,
+  },
   scrollView: {
     flex: 1,
     backgroundColor: theme.colors.background.primary,
     marginTop: 160, // Add space for absolutely positioned categories
   },
   section: {
-    marginTop: theme.spacing.lg,
+    marginTop: theme.spacing.md,
   },
   sectionHeader: {
     flexDirection: 'row',

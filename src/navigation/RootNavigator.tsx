@@ -10,8 +10,7 @@ import { SplashScreen } from '../screens/SplashScreen';
 import { OnboardingScreen } from '../screens/onboarding/OnboardingScreen';
 import { AuthScreen, SignInScreen, PhoneAuthScreen, PhoneVerificationScreen } from '../screens/auth';
 import { MainTabNavigator } from './MainTabNavigator';
-import { CategoryDetailScreen } from '../screens/main/CategoryDetailScreen';
-import { RootStackParamList, CategoryType } from '../types';
+import { RootStackParamList } from '../types';
 import { defaultScreenOptions } from './transitions';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -20,7 +19,6 @@ type AppState = 'splash' | 'onboarding' | 'auth' | 'signIn' | 'phoneAuth' | 'pho
 
 export const RootNavigator: React.FC = () => {
   const [appState, setAppState] = useState<AppState>('splash');
-  const [selectedCategory, setSelectedCategory] = useState<CategoryType | null>(null);
   const [phoneNumber, setPhoneNumber] = useState<string>('');
   const navigationRef = useRef<any>(null);
 
@@ -71,14 +69,6 @@ export const RootNavigator: React.FC = () => {
   const handleFacebookAuth = () => {
     // TODO: Implement Facebook auth
     setAppState('main');
-  };
-
-  const handleCategoryPress = (category: CategoryType) => {
-    setSelectedCategory(category);
-  };
-
-  const handleCategoryBack = () => {
-    setSelectedCategory(null);
   };
 
   const handleNavigateToChat = (params: any) => {
@@ -166,32 +156,12 @@ export const RootNavigator: React.FC = () => {
         )}
 
         {appState === 'main' && (
-          <>
-            <Stack.Screen 
-              name="Main"
-              options={{ animation: 'fade' }}
-            >
-              {() => <MainTabNavigator onCategoryPress={handleCategoryPress} onNavigateToChat={handleNavigateToChat} />}
-            </Stack.Screen>
-            
-            {selectedCategory && (
-              <Stack.Screen 
-                name="CategoryDetail" 
-                options={{ 
-                  animation: 'slide_from_right',
-                  gestureEnabled: true,
-                  fullScreenGestureEnabled: true,
-                }}
-              >
-                {() => (
-                  <CategoryDetailScreen
-                    category={selectedCategory}
-                    onBack={handleCategoryBack}
-                  />
-                )}
-              </Stack.Screen>
-            )}
-          </>
+          <Stack.Screen 
+            name="Main"
+            options={{ animation: 'fade' }}
+          >
+            {() => <MainTabNavigator onNavigateToChat={handleNavigateToChat} />}
+          </Stack.Screen>
         )}
       </Stack.Navigator>
     </NavigationContainer>
