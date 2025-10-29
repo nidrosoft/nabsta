@@ -171,7 +171,7 @@ export const MainTabNavigator: React.FC<MainTabNavigatorProps> = ({ onNavigateTo
           ),
         }}
       >
-        {() => <HomeScreen onCategoryPress={onCategoryPress} />}
+        {() => <HomeScreen />}
       </Tab.Screen>
 
       <Tab.Screen

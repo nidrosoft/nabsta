@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import { SearchNormal1, Location, Setting4 } from 'iconsax-react-native';
+import { SearchNormal1, Location, Setting4, Car, Home3, Electricity, ShoppingBag, Home2, Cup, Game, Book, PetCare, Category } from 'iconsax-react-native';
 import { SearchBar } from '../../components/common';
 import { DiscoverBanner, ListingCard } from '../../components/home';
 import { theme } from '../../theme';
@@ -239,23 +239,40 @@ interface HomeScreenProps {
 }
 
 const CATEGORIES = [
-  'All',
-  'Cars & Vehicles',
-  'Electronics',
-  'Furniture',
-  'Clothing & Shoes',
-  'Home & Garden',
-  'Sports & Outdoors',
-  'Toys & Games',
-  'Books & Media',
-  'Pet Supplies',
-  'Other',
+  { id: 'all', name: 'All', icon: 'category' },
+  { id: 'cars', name: 'Cars & Vehicles', icon: 'car' },
+  { id: 'electronics', name: 'Electronics', icon: 'electricity' },
+  { id: 'furniture', name: 'Furniture', icon: 'home3' },
+  { id: 'clothing', name: 'Clothing & Shoes', icon: 'shoppingBag' },
+  { id: 'homeGarden', name: 'Home & Garden', icon: 'home2' },
+  { id: 'sports', name: 'Sports & Outdoors', icon: 'cup' },
+  { id: 'toys', name: 'Toys & Games', icon: 'game' },
+  { id: 'books', name: 'Books & Media', icon: 'book' },
+  { id: 'pets', name: 'Pet Supplies', icon: 'petCare' },
+  { id: 'other', name: 'Other', icon: 'category' },
 ];
+
+const getCategoryIcon = (iconName: string, color: string) => {
+  const iconProps = { size: 16, color, variant: 'Bold' as const };
+  switch (iconName) {
+    case 'car': return <Car {...iconProps} />;
+    case 'electricity': return <Electricity {...iconProps} />;
+    case 'home3': return <Home3 {...iconProps} />;
+    case 'shoppingBag': return <ShoppingBag {...iconProps} />;
+    case 'home2': return <Home2 {...iconProps} />;
+    case 'cup': return <Cup {...iconProps} />;
+    case 'game': return <Game {...iconProps} />;
+    case 'book': return <Book {...iconProps} />;
+    case 'petCare': return <PetCare {...iconProps} />;
+    default: return <Category {...iconProps} />;
+  }
+};
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({ onListingPress }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [refreshing, setRefreshing] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [location, setLocation] = useState('San Diego');
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -267,6 +284,12 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onListingPress }) => {
   const handleLocalEventsPress = () => {
     // TODO: Navigate to local events
     console.log('Navigate to local events');
+  };
+
+  const handleLocationPress = () => {
+    // TODO: Implement location detection
+    console.log('Detect user location');
+    // For now, just toggle between San Diego and current location
   };
 
   const handleListingPress = (listingId: string) => {
@@ -294,7 +317,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onListingPress }) => {
               placeholder="Search OfferUp"
               value={searchQuery}
               onChangeText={setSearchQuery}
-              location="Seattle"
+              location={location}
+              onLocationPress={handleLocationPress}
               searchIcon={<SearchNormal1 size={20} color={theme.colors.text.tertiary} />}
               locationIcon={<Location size={18} color={theme.colors.text.white} variant="Bold" />}
             />
@@ -310,16 +334,18 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onListingPress }) => {
         contentContainerStyle={styles.categoriesContent}
       >
         {CATEGORIES.map((category) => {
-          const isSelected = category === selectedCategory;
+          const isSelected = category.id === selectedCategory;
+          const iconColor = isSelected ? theme.colors.text.white : theme.colors.text.primary;
           return (
             <TouchableOpacity
-              key={category}
+              key={category.id}
               style={[styles.categoryPill, isSelected && styles.categoryPillSelected]}
-              onPress={() => setSelectedCategory(category)}
+              onPress={() => setSelectedCategory(category.id)}
               activeOpacity={0.7}
             >
+              {getCategoryIcon(category.icon, iconColor)}
               <Text style={[styles.categoryPillText, isSelected && styles.categoryPillTextSelected]}>
-                {category}
+                {category.name}
               </Text>
             </TouchableOpacity>
           );
@@ -418,7 +444,7 @@ const styles = StyleSheet.create({
     marginTop: 160, // Add space for absolutely positioned categories
   },
   section: {
-    marginTop: theme.spacing.md,
+    marginTop: theme.spacing.sm,
   },
   sectionHeader: {
     flexDirection: 'row',
