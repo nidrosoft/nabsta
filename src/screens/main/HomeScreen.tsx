@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import { SearchNormal1, Location, Setting4, Car, Home3, Electricity, ShoppingBag, Home2, Cup, Game, Book, PetCare, Category } from 'iconsax-react-native';
+import { SearchNormal1, Location, Setting4, Car, Home3, Electricity, ShoppingBag, Home2, Cup, Game, Book, Heart, Category } from 'iconsax-react-native';
 import { SearchBar } from '../../components/common';
 import { DiscoverBanner, ListingCard } from '../../components/home';
 import { theme } from '../../theme';
@@ -248,7 +248,7 @@ const CATEGORIES = [
   { id: 'sports', name: 'Sports & Outdoors', icon: 'cup' },
   { id: 'toys', name: 'Toys & Games', icon: 'game' },
   { id: 'books', name: 'Books & Media', icon: 'book' },
-  { id: 'pets', name: 'Pet Supplies', icon: 'petCare' },
+  { id: 'pets', name: 'Pet Supplies', icon: 'heart' },
   { id: 'other', name: 'Other', icon: 'category' },
 ];
 
@@ -263,7 +263,7 @@ const getCategoryIcon = (iconName: string, color: string) => {
     case 'cup': return <Cup {...iconProps} />;
     case 'game': return <Game {...iconProps} />;
     case 'book': return <Book {...iconProps} />;
-    case 'petCare': return <PetCare {...iconProps} />;
+    case 'heart': return <Heart {...iconProps} />;
     default: return <Category {...iconProps} />;
   }
 };
