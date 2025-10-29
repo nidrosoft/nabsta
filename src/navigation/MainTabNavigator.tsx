@@ -10,6 +10,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
 import { Home2, MessageText, Add, ClipboardText, User } from 'iconsax-react-native';
 import { HomeScreen } from '../screens/main/HomeScreen';
+import { ForSaleFeedScreen } from '../screens/main/ForSaleFeedScreen';
+import { CategoryDetailScreen } from '../screens/main/CategoryDetailScreen';
 import { ListingsScreen } from '../screens/listings';
 import { AccountScreen } from '../screens/main/AccountScreen';
 import { SellFlowScreen } from '../screens/sell';
@@ -32,6 +34,9 @@ export const MainTabNavigator: React.FC<MainTabNavigatorProps> = ({ onCategoryPr
   const [showListingSheet, setShowListingSheet] = useState(false);
   const [showSellFlow, setShowSellFlow] = useState(false);
   const [showListingDetail, setShowListingDetail] = useState(false);
+  const [showForSaleFeed, setShowForSaleFeed] = useState(false);
+  const [showCategoryDetail, setShowCategoryDetail] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<CategoryType | null>(null);
   const slideAnim = React.useRef(new Animated.Value(1000)).current; // Start off-screen
 
   const handleTabPress = () => {
@@ -102,7 +107,18 @@ export const MainTabNavigator: React.FC<MainTabNavigatorProps> = ({ onCategoryPr
       >
         <Tab.Screen
           name="Home"
-          component={() => <HomeScreen onCategoryPress={onCategoryPress} onListingPress={() => setShowListingDetail(true)} />}
+          component={() => <HomeScreen 
+            onCategoryPress={(category) => {
+              if (category === 'forSale') {
+                setShowForSaleFeed(true);
+              } else {
+                setSelectedCategory(category);
+                setShowCategoryDetail(true);
+              }
+            }} 
+            onListingPress={() => setShowListingDetail(true)} 
+            onForSalePress={() => setShowForSaleFeed(true)} 
+          />}
           options={{
             tabBarIcon: ({ focused, color }) => (
               <Home2 size={24} color={color} variant={focused ? 'Bold' : 'Linear'} />
@@ -250,6 +266,26 @@ export const MainTabNavigator: React.FC<MainTabNavigatorProps> = ({ onCategoryPr
           }}
         />
       </Animated.View>
+    )}
+
+    {/* For Sale Feed Screen */}
+    {showForSaleFeed && (
+      <View style={styles.sellFlowOverlay}>
+        <ForSaleFeedScreen onBack={() => setShowForSaleFeed(false)} />
+      </View>
+    )}
+
+    {/* Category Detail Screen (Coming Soon for Jobs, Rentals, etc.) */}
+    {showCategoryDetail && selectedCategory && (
+      <View style={styles.sellFlowOverlay}>
+        <CategoryDetailScreen 
+          category={selectedCategory} 
+          onBack={() => {
+            setShowCategoryDetail(false);
+            setSelectedCategory(null);
+          }} 
+        />
+      </View>
     )}
   </>
   );

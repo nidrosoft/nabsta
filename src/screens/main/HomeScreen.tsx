@@ -238,9 +238,10 @@ const MOCK_LISTINGS = [
 interface HomeScreenProps {
   onCategoryPress: (category: CategoryType) => void;
   onListingPress?: () => void;
+  onForSalePress?: () => void;
 }
 
-export const HomeScreen: React.FC<HomeScreenProps> = ({ onCategoryPress, onListingPress }) => {
+export const HomeScreen: React.FC<HomeScreenProps> = ({ onCategoryPress, onListingPress, onForSalePress }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [refreshing, setRefreshing] = useState(false);
 
@@ -260,6 +261,10 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onCategoryPress, onListi
   const handleLocalEventsPress = () => {
     // TODO: Navigate to local events
     console.log('Navigate to local events');
+  };
+
+  const handleForSalePress = () => {
+    onForSalePress?.();
   };
 
   const handleListingPress = (listingId: string) => {
@@ -319,8 +324,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onCategoryPress, onListi
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>For sale</Text>
-            <TouchableOpacity onPress={handleFilterPress} activeOpacity={0.7}>
-              <Setting4 size={24} color={theme.colors.text.primary} />
+            <TouchableOpacity onPress={handleForSalePress} activeOpacity={0.7}>
+              <Text style={styles.viewAllText}>View all</Text>
             </TouchableOpacity>
           </View>
 
@@ -379,9 +384,14 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing.md,
   },
   sectionTitle: {
-    fontSize: theme.typography.fontSize.xxl,
+    fontSize: theme.typography.fontSize.lg,
     fontWeight: theme.typography.fontWeight.bold,
     color: theme.colors.text.primary,
+  },
+  viewAllText: {
+    fontSize: theme.typography.fontSize.sm,
+    fontWeight: theme.typography.fontWeight.semibold,
+    color: theme.colors.primary.start,
   },
   listingsGrid: {
     flexDirection: 'row',

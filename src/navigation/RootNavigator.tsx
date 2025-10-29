@@ -176,7 +176,7 @@ export const RootNavigator: React.FC = () => {
             
             {selectedCategory && (
               <Stack.Screen 
-                name="Main" 
+                name="CategoryDetail" 
                 options={{ 
                   animation: 'slide_from_right',
                   gestureEnabled: true,
